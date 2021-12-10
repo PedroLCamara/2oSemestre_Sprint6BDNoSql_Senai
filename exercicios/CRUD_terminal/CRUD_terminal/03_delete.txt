@@ -21,9 +21,9 @@ Descrição = Oracle Inc.
 Data de Inclusão = data de hoje
 
 
-*db.Materias. remove ({ "_id": ObjectId("61b29ecf79cf325b90d667bc") })
+*db.Materias. remove ({ "_id": ObjectId("61b263dde1d7f676388f7d73") })
 
-*db.Materias. remove ({ "_id": ObjectId("61b29ecf79cf325b90d667bd") })
+*db.Materias. remove ({ "_id": ObjectId("61b263dde1d7f676388f7d74") })
 
 *db.Materias. remove ({ Titulo: "Titulo Pirebase" })
 

@@ -26,4 +26,4 @@ Titulo = Titulo R
 Descrição = Oracle
 Data de Inclusão = data de hoje
 
-(  db.Materias.insertMany([{Titulo: "Titulo U", Descricao: "Java", Concluida: true}, {Titulo: "Titulo O", Descricao: "CSharp", Concluida: false}, {Titulo: "Titulo P", Descricao: "Firebase"}, {Titulo: "Titulo Y", Descricao: "Microsoft"}, {Titulo: "Titulo R", Descricao: "Oracle", DataDeInclusao: new Date()}])  )
+(  db.Materias.insertMany([{Titulo: "Titulo U", Descricao: "Java", Concluida: true}, {Titulo: "Titulo O", Descricao: "CSharp", Concluida: false}, {Titulo: "Titulo P", Descricao: "Firebase"}, {Titulo: "Titulo Y", Descricao: "Microsoft"}, {Titulo: "Titulo R", Descricao: "Oracle", DataDeInclusao: Date()}])  )

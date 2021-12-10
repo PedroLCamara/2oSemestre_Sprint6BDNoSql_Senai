@@ -1,0 +1,37 @@
+1.	Selecione todos os registros em que as descrições contenham, em qualquer parte da palavra, 'js'.
+db.Tarefas.find({descricao: {$regex: /js/}}).pretty()
+
+2.	Selecione todos os registros em que as descrições terminem com a letra 't'.
+db.Tarefas.find({descricao: {$regex: /t$/}}).pretty()
+
+3.	Selecione todos os registros em que as descrições terminem com a letra 'l'.
+db.Tarefas.find({descricao: {$regex: /l$/}}).pretty()
+
+4.	Selecione todos os registros em que as descrições terminem com a letra 't' ou 'l'.
+db.Tarefas.find({$or : [{descricao: {$regex: /l$/}}, {descricao: {$regex: /t$/}}] }).pretty()
+
+5.	Selecione todos os registros em que as descrições comecem com a letra 'b'.
+db.Tarefas.find({descricao: {$regex: /^b/}}).pretty()
+
+6.	Selecione todos os registros em que as descrições comecem com a letra 'j' ou 'h'.
+db.Tarefas.find({$or : [{descricao: {$regex: /^j/}}, {descricao: {$regex: /^h/}}] }).pretty()
+
+7.	Ordene pela data de inclusão.
+db.Tarefas.find().sort({dataInclusao: 1}).pretty()
+
+8.	Ordene pelas descrições.
+db.Tarefas.find().sort({descricao: 1}).pretty()
+
+9.	Ordene pela quantidade de caracteres das descrições.
+db.collection.aggregate(
+    [
+        {$project: {
+            "field": 1,
+            "field_length": { $strLenCP: "$field" }
+        }},
+        {$sort: {"field_length": -1}},
+        {$project: {"field_length": 0}}
+    ]
+)
+
+10.	Procure somente registros aonde o dia da data de inclusão seja igual a 01.
