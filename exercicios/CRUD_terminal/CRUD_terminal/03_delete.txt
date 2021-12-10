@@ -19,3 +19,14 @@ Descrição = MicroSOFT
 Titulo = Titulo Roracle
 Descrição = Oracle Inc.
 Data de Inclusão = data de hoje
+
+
+*db.Materias. remove ({ "_id": ObjectId("61b29ecf79cf325b90d667bc") })
+
+*db.Materias. remove ({ "_id": ObjectId("61b29ecf79cf325b90d667bd") })
+
+*db.Materias. remove ({ Titulo: "Titulo Pirebase" })
+
+*db.Materias. remove ({ Descricao: "MicroSOFT" })
+
+*db.Materias. remove ({ Descricao: "Oracle Inc." })
