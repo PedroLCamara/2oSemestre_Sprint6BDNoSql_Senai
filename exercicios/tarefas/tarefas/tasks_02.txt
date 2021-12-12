@@ -23,15 +23,32 @@ db.Tarefas.find().sort({dataInclusao: 1}).pretty()
 db.Tarefas.find().sort({descricao: 1}).pretty()
 
 9.	Ordene pela quantidade de caracteres das descrições.
-db.collection.aggregate(
+db.Tarefas.aggregate(
     [
         {$project: {
-            "field": 1,
-            "field_length": { $strLenCP: "$field" }
+            informacoes: "$$ROOT",
+            tamanhoDescricao: { $strLenCP: "$descricao" }
         }},
-        {$sort: {"field_length": -1}},
+        {$sort: {tamanhoDescricao: 1}},
         {$project: {"field_length": 0}}
     ]
-)
+).pretty()
 
 10.	Procure somente registros aonde o dia da data de inclusão seja igual a 01.
+db.Tarefas.aggregate(
+    [
+        {$project: {
+	    informacoes: "$$ROOT",
+	    diaDoMes : { 
+              $dayOfMonth : { 
+                $dateFromString: {
+    	        dateString: "$dataInclusao",
+                format: "%d/%m/%Y"
+              }}
+            }
+        }},
+	{ $match : { diaDoMes : 1}}
+    ]
+).pretty()
+
+

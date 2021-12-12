@@ -1,31 +1,124 @@
 1.	Selecione todos os registros.
+db.Alunos.find()
+
 2.	Selecione todos os registros e deixe a com apresentação melhor visível.
+db.Alunos.find().pretty()
+
 3.	Selecione todos os registros em que o nome seja igual a ‘Aya’.
+db.Alunos.find({nome: "Aya"}).pretty()
+
 4.	Selecione todos os registros em que o aluno nasceu em São Paulo.
+db.Alunos.find({nasceuEmSp: true}).pretty()
+
 5.	Selecione todos os registros em que contenha a título do livro igual a “Java - Web Developers”.
+db.Alunos.aggregate([
+      {$project: {
+	 informacoes : "$$ROOT",
+         livrosConsulta: {
+            $filter: {
+               input: "$livros",
+               as: "livro",
+               cond: {$eq : ["$$livro.titulo", "Java - Web Developers"]}
+            }
+         }
+      }},
+      {$match : {livrosConsulta : {$ne : []}}}
+]).pretty()
+
 6.	Selecione todos os registros em que a aluna tenha o livro “Clean Code A” e o nome “Helena”. 
+db.Alunos.aggregate([
+      {$project: {
+	 informacoes : "$$ROOT",
+         nome : 1,
+         livrosConsulta: {
+            $filter: {
+               input: "$livros",
+               as: "livro",
+               cond: {$eq : ["$$livro.titulo", "Clean Code A"]}
+            }
+         }
+      }},
+      {$match : {livrosConsulta : {$ne : []}, nome : "Helena"}}
+]).pretty()
+
 7.	Selecione todos os registros em que a aluna não tenha nascido em sp e tenha o livro Cangaceiro JavaScript.
+db.Alunos.aggregate([
+      {$project: {
+	 informacoes : "$$ROOT",
+         nasceuEmSp: 1,
+         livrosConsulta: {
+            $filter: {
+               input: "$livros",
+               as: "livro",
+               cond: {$eq : ["$$livro.titulo", "Cangaceiro JavaScript"]}
+            }
+         }
+      }},
+      {$match : {livrosConsulta : {$ne : []}, nasceuEmSp : false}}
+]).pretty()
+
 8.	Selecione todos os registros em que contenham os alunos que tenham o livro Java – Web Developers ou Clean Code B. Primeiro: realize o exercício com o operador ou e posteriormente realize o exercício com o operador in.
+db.Alunos.find({$or : [{livros : {$elemMatch : {titulo : "Java - Web Developers"}}}, {livros : {$elemMatch : {titulo : "Clean Code B"}}}]}).pretty()
+
+db.Alunos.find({livros : {$elemMatch : {titulo : {$in : [ "Java - Web Developers", "Clean Code B"]}}}}).pretty()
+
+
 9.	Pegue o exercício acima e inclua também aonde o aluno pode ter nascido em sp.
+db.Alunos.find({$or : [{livros : {$elemMatch : {titulo : "Java - Web Developers"}}}, {livros : {$elemMatch : {titulo : "Clean Code B"}}}, {nasceuEmSp : true}]}).pretty()
+
 10.	Procure todos os alunos que tenham nascido em são paulo ou os livros ‘MySQL’ e ‘MongoDB’.
+db.Alunos.find({$or : [{livros : {$elemMatch : {titulo : "MySQL"}}}, {livros : {$elemMatch : {titulo : "MongoDB"}}}, {nasceuEmSp : true}]}).pretty()
+
 11.	Selecione todos os registros em que os livros contenham em qualquer parte da palavra, 'Clean'.
+db.Alunos.find({livros : {$elemMatch : {titulo : {$regex: /Clean/}}}}).pretty()
+
 12.	Selecione todos os registros em que os títulos dos livros terminem com a letra 'S'.
+db.Alunos.find({livros : {$elemMatch : {titulo : {$regex: /S$/}}}}).pretty()
+
 13.	Selecione todos os registros em que todos os livros terminem com a letra 't'.
+db.Alunos.find({livros : {$elemMatch : {titulo : {$regex: /t$/}}}}).pretty()
+
 14.	Selecione todos os nomes das alunos terminem com a letra 'k' ou 'o'.
+db.Alunos.find({$or : [{nome : {$regex: /k$/}}, {nome : {$regex: /o$/}}]}).pretty()
+
 15.	Selecione todos os registros em que os nomes comecem com a letra 'a'.
+db.Alunos.find({nome : {$regex : /^A/}}).pretty()
+
 16.	Selecione todos os registros em que nomes comecem com a letra 'a' ou 'h'.
+db.Alunos.find({$or : [{nome : {$regex: /^A/}}, {nome : {$regex: /^H/}}]}).pretty()
 
 Ordenação
 1.	ordena pelo campo _id de forma crescente
+db.Alunos.find().sort({_id : 1}).pretty()
+
 2.	ordena pelo campo _id de forma decrescente
+db.Alunos.find().sort({_id : -1}).pretty()
+
 3.	ordena pelo campo nome de forma crescente e pega o primeiro registro
+db.Alunos.aggregate([
+	{$project: {
+           Informacoes : "$$ROOT",
+           nome : 1
+	}},
+	{$sort : {nome : 1}},
+	{ $limit: 1}
+]).pretty()
+
 4.	seleciona somente o primeiro registro
+db.Alunos.aggregate([
+	{$project: {
+           Informacoes : "$$ROOT"
+	}},
+	{ $limit: 1}
+]).pretty()
  
 Exercícios INSERT
 1.	Crie 5 novos registros de alunos.
 Deve conter os critérios abaixo. 3 em sp e 2 que não nasceram em sp.
 Deve conter pelo menos alguns dos livros colocados: HTML, CSS, Design, JavaScript, Java, C#, MySQL, MongoDB.
 A data de nascimento deve ser inferior a data atual.
+
+db.Alunos.insertMany([{nasceuEmSp: true, nome: "Teste", "dateOfBirth" : "1990-01-10T08:30:00.000Z", livros : [{titulo: "HTML", leu: false}, {titulo: "CSS", leu: false}]}, {nasceuEmSp: true, nome: "Teste", "dateOfBirth" : "1990-01-10T08:30:00.000Z", livros : [{titulo: "Design", leu: false}, {titulo: "JavaScript", leu: false}]}, {nasceuEmSp: true, nome: "Teste", "dateOfBirth" : "1990-01-10T08:30:00.000Z", livros : [{titulo: "Java", leu: false}, {titulo: "C#", leu: false}]}, {nasceuEmSp: false, nome: "Teste", "dateOfBirth" : "1990-01-10T08:30:00.000Z", livros : [{titulo: "MySQL", leu: false}, {titulo: "MongoDB", leu: false}]}, {nasceuEmSp: false, nome: "Teste", "dateOfBirth" : "1990-01-10T08:30:00.000Z", livros : [{titulo: "HTML", leu: false}, {titulo: "MongoDB", leu: false}]}])
  
 Exercícios UPDATE
 1.	Atualize os registros criados no exercício anterior, com os filtros abaixo (não se esqueça de buscar pelo _id):
@@ -33,12 +126,38 @@ Deixe todos os registros criados acima que estiverem como true para false, e vic
 Atualize a data de nascimento de 2 alunos.
 Inclua pelo menos 3 livros que elas tenham lido.
 
+db.Alunos.update({"_id" : ObjectId("61b5759d97e1f91d8abffecd")}, {nasceuEmSp: true, nome: "Teste", "dateOfBirth" : "1991-01-10T08:30:00.000Z", livros : [{titulo: "HTML", leu: true}, {titulo: "MongoDB", leu: true}]})
+
+db.Alunos.update({"_id" : ObjectId("61b5759d97e1f91d8abffecc")}, {nasceuEmSp: false, nome: "Teste", "dateOfBirth" : "1991-01-10T08:30:00.000Z", livros : [{titulo: "MySQL", leu: true}, {titulo: "MongoDB", leu: true}]})
+
+db.Alunos.update({"_id" : ObjectId("61b5759d97e1f91d8abffecb")}, {nasceuEmSp: false, nome: "Teste", "dateOfBirth" : "1990-01-10T08:30:00.000Z", livros : [{titulo: "Java", leu: false}, {titulo: "C#", leu: false}]})
+
+db.Alunos.update({"_id" : ObjectId("61b5759d97e1f91d8abffeca")}, {nasceuEmSp: false, nome: "Teste", "dateOfBirth" : "1990-01-10T08:30:00.000Z", livros : [{titulo: "Design", leu: false}, {titulo: "JavaScript", leu: false}]})
+
+db.Alunos.update({"_id" : ObjectId("61b5759d97e1f91d8abffec9")}, {nasceuEmSp: false, nome: "Teste", "dateOfBirth" : "1990-01-10T08:30:00.000Z", livros : [{titulo: "HTML", leu: false}, {titulo: "CSS", leu: false}]})
+
 Exercícios DELETE
 1.	Exclua 5 itens dada uma determinada condição.
 Exemplo:
 Por ordenação de inserção, os dois primeiros que foram inseridos.
 Por ordem alfabética, os dois primeiros.
 Por ordem de signo decrescente, o primeiro signo.
+
+db.Alunos.aggregate([
+{$limit : 2}
+]).forEach(function(Aluno) {
+	db.Alunos.remove({"_id" : Aluno._id});
+})
+
+
+db.Alunos.aggregate([
+{$sort : {nome : 1}},
+{$limit : 2}
+]).forEach(function(Aluno) {
+	db.Alunos.remove({"_id" : Aluno._id});
+})
+
+
 
  
 Desafio Extra

@@ -1,2 +1,35 @@
 1.	Encontre todos os registros em que tenha como concluído o dia 01.
+db.Tarefas.aggregate(
+    [
+        {$project: {
+	    informacoes: "$$ROOT",
+	    diaDoMes : { 
+              $dayOfMonth : { 
+                $dateFromString: {
+    	        dateString: "$dataInclusao",
+                format: "%d/%m/%Y"
+              }}
+            },
+	    concluida : 1
+        }},
+	{ $match : { concluida : "true", diaDoMes : 1}},
+    ]
+).pretty()
+
 2.	Encontre todos os registros em que tenha como concluído o ano 2018.
+db.Tarefas.aggregate(
+    [
+        {$project: {
+	    informacoes: "$$ROOT",
+	    ano : { 
+              $year : { 
+                $dateFromString: {
+    	        dateString: "$dataInclusao",
+                format: "%d/%m/%Y"
+              }}
+            },
+	    concluida : 1
+        }},
+	{ $match : { concluida : "true", ano : 2018}},
+    ]
+).pretty()
